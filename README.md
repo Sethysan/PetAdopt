@@ -54,7 +54,9 @@ This folder contains the Spring Boot server for the shelter application.
 
 2. Configure the database connection in `src/main/resources/application.properties`:
    `spring.datasource.url=jdbc:postgresql://localhost:5432/shelter`
+
    `spring.datasource.username=your_username`
+
    `spring.datasource.password=your_password`
 
 3. Build and run the server:
@@ -91,7 +93,7 @@ This folder contains the Spring Boot server for the shelter application.
 -  **GET**  `"/pets"` : Retrieve a list of all pets.
 -  **POST** `"/add-pet"` : Add a new pet to the shelter.
 -  **GET**  `"/pet/{id}"` : Retrieve a details of specific pet.
--  **GET**  `"/pets"` : Retrieve a list of all parents.
+-  **GET**  `"/parents"` : Retrieve a list of all parents.
 -  **POST** `"/parents"` : Add a new parent to the shelter.
 -  **GET**  `"/parent/{id}"` : Retrieve a details of specific parent.
 -  **PUT** `"/adopt"` : Adopt a pet.
