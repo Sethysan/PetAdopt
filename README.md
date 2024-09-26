@@ -52,9 +52,11 @@ This folder contains the Spring Boot server for the shelter application.
 
    ```
 
-2. Configure the database connection in `src/main/resources/application.properties`:
+2. Configure the database connection in : `src/main/resources/application.properties`:
+   
+   `spring.application.name=shelter`
 
-   `spring.datasource.url=jdbc:postgresql://localhost:5432/shelter`
+   `spring.datasource.url=jdbc:postgresql://localhost:5432/pets`
 
    `spring.datasource.username=your_username`
 
@@ -91,13 +93,13 @@ This folder contains the Spring Boot server for the shelter application.
 ### API Endpoints
    The backend exposes several RESTful API endpoints for managing pets:
 
--  **GET**  `"/pets"` : Retrieve a list of all pets.
--  **POST** `"/add-pet"` : Add a new pet to the shelter.
--  **GET**  `"/pet/{id}"` : Retrieve a details of specific pet.
--  **GET**  `"/parents"` : Retrieve a list of all parents.
--  **POST** `"/parents"` : Add a new parent to the shelter.
--  **GET**  `"/parent/{id}"` : Retrieve a details of specific parent.
--  **PUT** `"/adopt"` : Adopt a pet.
+-  ***GET***  `"/pets"` : Retrieve a list of all pets.
+-  ***POST*** `"/add-pet"` : Add a new pet to the shelter.
+-  ***GET***  `"/pet/{id}"` : Retrieve a details of specific pet.
+-  ***GET***  `"/parents"` : Retrieve a list of all parents.
+-  ***POST*** `"/parents"` : Add a new parent to the shelter.
+-  ***GET***  `"/parent/{id}"` : Retrieve a details of specific parent.
+-  ***PUT*** `"/adopt"` : Adopt a pet.
 
 
 ### Technologies Used
@@ -106,13 +108,26 @@ This folder contains the Spring Boot server for the shelter application.
 -   **Build Tools** : Vite for the frontend, Maven for the backend
 
 
-### Contributing
-   Fork the repository.
-   Create a new feature branch: git checkout -b feature-name
-   Commit your changes: git commit -m 'Add some feature'
-   Push the branch: git push origin feature-name
-   Open a pull request.
+## Contributing
 
+   1. **Fork the repository.**
+   2. **Create a new feature branch:**
+   ```bash
+   git checkout -b feature-name
+
+   ```
+   3. **Commit your changes:**
+   ```bash
+   git commit -m 'Add some feature'
+
+   ```
+   4. **Push the branch:**
+   ```bash
+   git push origin feature-name
+
+   ```
+   5. **Open a pull request**
+   
    #### License
    This project is licensed under the MIT License
 
