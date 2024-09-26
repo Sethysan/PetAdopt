@@ -14,5 +14,8 @@ export default {
 
   addPet(pet){
     return http.post("add-pet", pet);
+  },
+  getAllParents() {
+    return http.get("/parents");
   }
 };

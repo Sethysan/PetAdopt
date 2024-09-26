@@ -4,7 +4,8 @@ import Add from "../components/AddPet.vue";
 
 const routes = [
   { path: "/", name: "home", component: Home },
-  { path: "/add", name: "add", component: Add },
+  { path: "/add", name: "add", component: Add }
+  
 ];
 
 export function createRouter() {
