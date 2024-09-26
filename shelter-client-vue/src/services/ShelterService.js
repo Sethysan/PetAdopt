@@ -13,9 +13,12 @@ export default {
   },
 
   addPet(pet){
-    return http.post("add-pet", pet);
+    return http.post("/add-pet", pet);
   },
   getAllParents() {
     return http.get("/parents");
+  },
+  addParent(parent) {
+    return http.post("/add-parent", parent);
   }
 };

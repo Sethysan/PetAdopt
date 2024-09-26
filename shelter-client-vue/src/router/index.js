@@ -1,11 +1,13 @@
 import { createRouter as _createRouter, createWebHistory } from "vue-router";
 import Home from "../components/Home.vue";
-import Add from "../components/AddPet.vue";
+import AddPet from "../components/AddPet.vue";
+import AddParent from "../components/AddParent.vue";
+
 
 const routes = [
   { path: "/", name: "home", component: Home },
-  { path: "/add", name: "add", component: Add }
-  
+  { path: "/add-Pet", name: "addPet", component: AddPet },
+  {path: "/add-Parent", name: "addParent", component: AddParent }
 ];
 
 export function createRouter() {

@@ -36,6 +36,7 @@ public class PetController {
     }
 
     //TODO: Endpoint to add a parent
+    @ResponseStatus(HttpStatus.CREATED)
     @RequestMapping(path="/add-parent", method = RequestMethod.POST)
     public Parent addParent(@RequestBody Parent parent) {
         return petDAO.addParent(parent);

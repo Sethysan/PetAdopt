@@ -1,13 +1,11 @@
 <template>
     <div>
-        <h1>Add Pet!</h1>
+        {{ newParent }}
+        <h1>Add Parent!</h1>
         <div v-if="valid === false">Invalid data, please try again</div>
-        <form v-on:submit.prevent="addPet">
-            Name: <input type="text" v-model="newPet.name" /> <br>
-            Weight: <input type="text" v-model="newPet.weight" /> <br>
-            Species: <input type="text" v-model="newPet.species" /> <br>
-            Paper Trained: <input type="checkbox" v-model="newPet.paperTrained" /> <br>
 
+        <form v-on:submit.prevent="addParent">
+            Name: <input type="text" v-model="newParent.name" />
             <button>Save!</button>
 
         </form>
@@ -15,23 +13,21 @@
 </template>
 
 <script>
-import shelterService from '../services/ShelterService.js';
-
-
+import shelterService from "../services/ShelterService.js";
 export default {
     data() {
         return {
             valid: true,
-            newPet: {}
+            newParent: {}
         }
     },
     methods: {
-        addPet() {
-            shelterService.addPet(this.newPet).then(
+        addParent() {
+            shelterService.addParent(this.newParent).then(
                 (response) => {
                     if (response.status === 201) {
-                        alert("Pet Added!");
-                        this.newPet = {};
+                        alert("Parent Added!");
+                        this.newParent = {};
                         this.$router.push({ name: "home" });
                     }
                 }
@@ -41,7 +37,7 @@ export default {
                         this.valid = false;
                     }
                 }
-            );
+            )
         }
     }
 
