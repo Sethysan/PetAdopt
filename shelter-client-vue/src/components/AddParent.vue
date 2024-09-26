@@ -1,9 +1,7 @@
 <template>
     <div>
-        {{ newParent }}
         <h1>Add Parent!</h1>
         <div v-if="valid === false">Invalid data, please try again</div>
-
         <form v-on:submit.prevent="addParent">
             Name: <input type="text" v-model="newParent.name" />
             <button>Save!</button>

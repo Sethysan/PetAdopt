@@ -20,5 +20,8 @@ export default {
   },
   addParent(parent) {
     return http.post("/add-parent", parent);
+  },
+  adopt(adoptionData) {
+    return http.put("/adopt", adoptionData);
   }
 };
