@@ -53,6 +53,7 @@ This folder contains the Spring Boot server for the shelter application.
    ```
 
 2. Configure the database connection in `src/main/resources/application.properties`:
+
    `spring.datasource.url=jdbc:postgresql://localhost:5432/shelter`
 
    `spring.datasource.username=your_username`
