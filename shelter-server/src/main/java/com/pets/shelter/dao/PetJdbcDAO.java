@@ -3,19 +3,17 @@ package com.pets.shelter.dao;
 import com.pets.shelter.model.Parent;
 import com.pets.shelter.model.Pet;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.CannotGetJdbcConnectionException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
-import org.springframework.web.server.ResponseStatusException;
 
 import javax.sql.DataSource;
 import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class PetJdbcDAO implements PetDAO{
+public class PetJdbcDAO implements PetDAO {
 
     private JdbcTemplate template;
 
@@ -27,11 +25,12 @@ public class PetJdbcDAO implements PetDAO{
         Pet pet = new Pet();
 
         pet.setId(rowSet.getInt("id"));
-        pet.setName(rowSet.getString("name"));
+        pet.setName(rowSet.getString("pet_name"));
         pet.setWeight(rowSet.getInt("weight"));
         pet.setSpecies(rowSet.getString("species"));
         pet.setPaperTrained(rowSet.getBoolean("paper_trained"));
         pet.setParent(rowSet.getInt("parent_id"));
+        pet.setParentName(rowSet.getString("parent_name"));
 
         return pet;
     }
@@ -40,7 +39,11 @@ public class PetJdbcDAO implements PetDAO{
     public List<Pet> getPets() {
 
         List<Pet> pets = new ArrayList<>();
-        String sql = "SELECT * FROM pet;";
+        String sql = "SELECT pet.id, pet.name AS pet_name, pet.weight, pet.species, pet.paper_trained, pet.parent_id, " +
+                "CASE WHEN pet.parent_id = 1 THEN 'Needs Adopted' ELSE parent.name END AS parent_name " +
+                "FROM pet " +
+                "JOIN parent ON pet.parent_id = parent.id";
+
 
         try {
             SqlRowSet results = template.queryForRowSet(sql);
@@ -50,9 +53,12 @@ public class PetJdbcDAO implements PetDAO{
                 pets.add(pet);
             }
         } catch (CannotGetJdbcConnectionException e) {
-            System.out.println("Problem connecting");
+            System.out.println("Problem connecting" + e.getMessage());
         } catch (DataIntegrityViolationException e) {
-            System.out.println("Data problems");
+            System.out.println("Data problems" + e.getMessage());
+        } catch (Exception e) {
+            System.out.println("Error fetching pets: " + e.getMessage());
+            e.printStackTrace();
         }
         return pets;
     }
@@ -66,7 +72,7 @@ public class PetJdbcDAO implements PetDAO{
         try {
             SqlRowSet results = template.queryForRowSet(sql, petId);
 
-            if(results.next()) {
+            if (results.next()) {
 
                 pet = mapRowToPet(results);
 
@@ -94,9 +100,9 @@ public class PetJdbcDAO implements PetDAO{
                     petToSave.isPaperTrained(),
                     1
             );
-        } catch(CannotGetJdbcConnectionException e) {
+        } catch (CannotGetJdbcConnectionException e) {
 
-        } catch(DataIntegrityViolationException e) {
+        } catch (DataIntegrityViolationException e) {
 
         }
 
@@ -107,8 +113,8 @@ public class PetJdbcDAO implements PetDAO{
     private Parent mapRowToParent(SqlRowSet results) {
 
         Parent parent = new Parent();
-        parent.setId( results.getInt("id") );
-        parent.setName( results.getString("name") );
+        parent.setId(results.getInt("id"));
+        parent.setName(results.getString("name"));
 
         return parent;
     }
@@ -124,7 +130,7 @@ public class PetJdbcDAO implements PetDAO{
 
         SqlRowSet results = template.queryForRowSet(sql, homePlaceholder);
 
-        while(results.next()) {
+        while (results.next()) {
             Parent parent = mapRowToParent(results);
             parents.add(parent);
         }
@@ -136,7 +142,7 @@ public class PetJdbcDAO implements PetDAO{
     @Override
     public Parent getParent(int parentId) {
 
-        if(parentId == 1) {
+        if (parentId == 1) {
             return null;
         }
 
@@ -145,7 +151,7 @@ public class PetJdbcDAO implements PetDAO{
         SqlRowSet results = template.queryForRowSet(sql, parentId);
 
         Parent parent = null;
-        if(results.next()) {
+        if (results.next()) {
             parent = mapRowToParent(results);
         }
 
@@ -159,7 +165,7 @@ public class PetJdbcDAO implements PetDAO{
 
         int newId = -1;
 
-        newId = template.queryForObject(sql, int.class, parent.getName() );
+        newId = template.queryForObject(sql, int.class, parent.getName());
 
         return getParent(newId);
     }

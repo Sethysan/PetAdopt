@@ -12,6 +12,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
 import java.util.List;
+
 @CrossOrigin
 @RestController
 public class PetController {
@@ -19,44 +20,51 @@ public class PetController {
     @Autowired
     private PetDAO petDAO;
 
-    @RequestMapping(path="/pets", method = RequestMethod.GET)
+    @RequestMapping(path = "/pets", method = RequestMethod.GET)
     public List<Pet> allPets() {
-        return petDAO.getPets();
+        try {
+            return petDAO.getPets();
+        } catch (Exception e) {
+
+            System.err.println("Error fetching pets: " + e.getMessage());
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Unable to retrieve pets", e);
+        }
     }
 
-    @RequestMapping(path="/pet/{id}", method = RequestMethod.GET)
+    @RequestMapping(path = "/pet/{id}", method = RequestMethod.GET)
     public Pet getPet(@PathVariable int id) {
 
         return petDAO.getPet(id);
     }
+
     @ResponseStatus(HttpStatus.CREATED)
-    @RequestMapping(path="/add-pet", method = RequestMethod.POST)
+    @RequestMapping(path = "/add-pet", method = RequestMethod.POST)
     public Pet addPet(@RequestBody @Valid Pet pet) {
         return petDAO.savePet(pet);
     }
 
     //TODO: Endpoint to add a parent
     @ResponseStatus(HttpStatus.CREATED)
-    @RequestMapping(path="/add-parent", method = RequestMethod.POST)
+    @RequestMapping(path = "/add-parent", method = RequestMethod.POST)
     public Parent addParent(@RequestBody Parent parent) {
         return petDAO.addParent(parent);
     }
 
     //TODO: Endpoint to retrieve all parents
-    @RequestMapping(path="/parents", method=RequestMethod.GET)
+    @RequestMapping(path = "/parents", method = RequestMethod.GET)
     public List<Parent> getParents() {
         return petDAO.getParents();
     }
 
     //TODO: Endpoint to retrieve one parent
-    @RequestMapping(path="/parent/{id}", method=RequestMethod.GET)
+    @RequestMapping(path = "/parent/{id}", method = RequestMethod.GET)
     public Parent getParent(@PathVariable int id) {
         return petDAO.getParent(id);
     }
 
     //TODO: Endpoint to link a parent and a pet
-    @RequestMapping(path="/adopt", method=RequestMethod.PUT)
+    @RequestMapping(path = "/adopt", method = RequestMethod.PUT)
     public void adopt(@RequestBody AdoptionDTO adoptionDTO) {
-        petDAO.link( adoptionDTO.getParentId(), adoptionDTO.getPetId() );
+        petDAO.link(adoptionDTO.getParentId(), adoptionDTO.getPetId());
     }
 }

@@ -8,6 +8,8 @@
             <p>Weight: {{ pet.weight }}lbs</p>
             <p>Species: {{ pet.species }}</p>
             <p>Paper Trained: {{ pet.paperTrained }}</p>
+            <p v-if="pet.parentName !== 'Needs Adopted'">Parent Name: {{ pet.parentName }}</p>
+            <p v-else>{{ pet.parentName }}</p>
         </div>
     </div>
 </template>
