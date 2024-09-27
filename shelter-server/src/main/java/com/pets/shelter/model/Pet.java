@@ -7,20 +7,14 @@ public class Pet {
     private int id;
     private String name;
 
-    @Max(value=150, message="Uh oh big doggo alert" )
+    @Max(value = 150, message = "Uh oh big doggo alert")
     private int weight;
     private String species;
     private boolean paperTrained;
     private int parent;
     private String parentName;
 
-    public String getParentName() {
-        return parentName;
-    }
-
-    public void setParentName(String parentName) {
-        this.parentName = parentName;
-    }
+    // Getters and Setters for each field
 
     public int getId() {
         return id;
@@ -68,5 +62,13 @@ public class Pet {
 
     public void setParent(int parent) {
         this.parent = parent;
+    }
+
+    public String getParentName() {
+        return parentName;
+    }
+
+    public void setParentName(String parentName) {
+        this.parentName = parentName;
     }
 }

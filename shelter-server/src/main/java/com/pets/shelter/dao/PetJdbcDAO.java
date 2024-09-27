@@ -21,7 +21,7 @@ public class PetJdbcDAO implements PetDAO {
         template = new JdbcTemplate(ds);
     }
 
-    private Pet mapRowToPet(SqlRowSet rowSet) {
+    private Pet mapRowToPetWithParentName(SqlRowSet rowSet) {
         Pet pet = new Pet();
 
         pet.setId(rowSet.getInt("id"));
@@ -29,8 +29,22 @@ public class PetJdbcDAO implements PetDAO {
         pet.setWeight(rowSet.getInt("weight"));
         pet.setSpecies(rowSet.getString("species"));
         pet.setPaperTrained(rowSet.getBoolean("paper_trained"));
+
+        // Mapping the parent ID and parent name
         pet.setParent(rowSet.getInt("parent_id"));
         pet.setParentName(rowSet.getString("parent_name"));
+
+        return pet;
+    }
+    private Pet mapRowToNewPet(SqlRowSet rowSet) {
+        Pet pet = new Pet();
+
+        pet.setId(rowSet.getInt("id"));
+        pet.setName(rowSet.getString("name"));
+        pet.setWeight(rowSet.getInt("weight"));
+        pet.setSpecies(rowSet.getString("species"));
+        pet.setPaperTrained(rowSet.getBoolean("paper_trained"));
+        pet.setParent(rowSet.getInt("parent_id"));
 
         return pet;
     }
@@ -41,16 +55,14 @@ public class PetJdbcDAO implements PetDAO {
         List<Pet> pets = new ArrayList<>();
         String sql = "SELECT pet.id, pet.name AS pet_name, pet.weight, pet.species, pet.paper_trained, pet.parent_id, " +
                 "CASE WHEN pet.parent_id = 1 THEN 'Needs Adopted' ELSE parent.name END AS parent_name " +
-                "FROM pet " +
-                "JOIN parent ON pet.parent_id = parent.id";
+                "FROM pet LEFT JOIN parent ON pet.parent_id = parent.id";
 
 
         try {
             SqlRowSet results = template.queryForRowSet(sql);
 
             while (results.next()) {
-                Pet pet = mapRowToPet(results);
-                pets.add(pet);
+                pets.add(mapRowToPetWithParentName(results));;
             }
         } catch (CannotGetJdbcConnectionException e) {
             System.out.println("Problem connecting" + e.getMessage());
@@ -74,8 +86,10 @@ public class PetJdbcDAO implements PetDAO {
 
             if (results.next()) {
 
-                pet = mapRowToPet(results);
+                pet = mapRowToNewPet(results);
 
+            }else{
+                return null;
             }
 
         } catch (CannotGetJdbcConnectionException e) {
@@ -89,7 +103,7 @@ public class PetJdbcDAO implements PetDAO {
     @Override
     public Pet savePet(Pet petToSave) {
 
-        String sql = "INSERT INTO pet (name,weight,species,paper_trained,parent_id) VALUES (?,?,?,?,?) RETURNING id";
+        String sql = "INSERT INTO pet (name, weight, species, paper_trained, parent_id) VALUES (?,?,?,?,?) RETURNING id";
 
         int newPetId = -1;
         try {
@@ -98,12 +112,13 @@ public class PetJdbcDAO implements PetDAO {
                     petToSave.getWeight(),
                     petToSave.getSpecies(),
                     petToSave.isPaperTrained(),
-                    1
+                    petToSave.getParent() != 0 ? petToSave.getParent() : 1 // Default parent ID to 1 for 'Needs Adopted'
             );
         } catch (CannotGetJdbcConnectionException e) {
+            System.out.println("Problem connecting: " + e.getMessage());
 
         } catch (DataIntegrityViolationException e) {
-
+            System.out.println("Data problems: " + e.getMessage());
         }
 
         return getPet(newPetId);
