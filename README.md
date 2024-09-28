@@ -62,7 +62,17 @@ This folder contains the Spring Boot server for the shelter application.
 
    `spring.datasource.password=your_password`
 
-3. Build and run the server:
+3. Run the `build.sql` file to set up the database:   
+
+```bash
+   psql -h localhost -U your_username -d pets -f Database/build.sql
+
+
+   ```
+   This script will create all the necessary tables and initial data for the application to function properly.
+
+4. Build and run the server:
+
    ```bash
    ./mvnw spring-boot:run
 
