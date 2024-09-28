@@ -31,18 +31,24 @@ export default {
 
 <style scoped>
 .pets-list {
-    display: flex; 
-    flex-wrap: wrap; 
-    justify-content: space-between; 
-    gap: 20px; 
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 20px;
 }
+
 .petCard {
     border-radius: 20px;
+    text-align: center;
     padding: 5px;
     margin: 5px;
     border: 1px solid #000;
-    width: 100%; 
-    max-width: 250px; 
-    background-color: rgba(100, 100, 177, 0.438);
+    width: 100%;
+    max-width: 250px;
+    background-color: rgba(100, 100, 177, 0.8);
+}
+
+p {
+    font-weight: bold;
 }
 </style>

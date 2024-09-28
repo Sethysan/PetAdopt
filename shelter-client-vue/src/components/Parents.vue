@@ -33,11 +33,15 @@ export default {
 }
 .parentCard {
     border-radius: 20px;
+    text-align: center;
     padding: 5px;
     margin: 5px;
     border: 1px solid #000;
     width: 100%; 
     max-width: 250px; 
-    background-color: rgb(53, 197, 233, 0.438);
+    background-color: rgba(53, 197, 233, 0.8);
+}
+p{
+    font-weight: bold;
 }
 </style>
