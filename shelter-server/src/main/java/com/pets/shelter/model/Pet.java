@@ -17,6 +17,7 @@ public class Pet {
     private String breed;
     private String description;
     private String imageUrl;
+    private int petDetailsId;
 
     public int getAge() {
         return age;
@@ -104,5 +105,12 @@ public class Pet {
 
     public void setParentName(String parentName) {
         this.parentName = parentName;
+    }
+    public int getPetDetailsId() {
+        return petDetailsId;
+    }
+
+    public void setPetDetailsId(int petDetailsId) {
+        this.petDetailsId = petDetailsId;
     }
 }

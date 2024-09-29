@@ -7,6 +7,7 @@ import com.pets.shelter.model.Parent;
 import com.pets.shelter.model.Pet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -35,6 +36,11 @@ public class PetController {
     public Pet getPet(@PathVariable int id) {
 
         return petDAO.getPet(id);
+    }
+    @RequestMapping(path = "/pet/{id}", method = RequestMethod.PUT)
+    public ResponseEntity<Pet> updatePet(@PathVariable int id, @RequestBody Pet pet) {
+        petDAO.updatePet(id, pet);
+        return ResponseEntity.ok(pet);
     }
 
     @ResponseStatus(HttpStatus.CREATED)

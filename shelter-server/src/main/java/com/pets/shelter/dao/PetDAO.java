@@ -18,6 +18,7 @@ public interface PetDAO {
     public Parent getParent(int parentId);
 
     public Parent addParent(Parent parent);
+    public void updatePet(int petId, Pet pet);
 
     public void link(int parentId, int petId);
 }

@@ -23,5 +23,8 @@ export default {
   },
   adopt(adoptionData) {
     return http.put("/adopt", adoptionData);
+  },
+  updatePet(petId,pet) {
+    return http.put(`/pet/${petId}`, pet);
   }
 };

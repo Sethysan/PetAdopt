@@ -79,32 +79,40 @@ public class PetJdbcDAO implements PetDAO {
 
     @Override
     public Pet getPet(int petId) {
-        Pet pet = null;
-
-        String sql = "SELECT p.name, pd.age, pd.breed, pd.description, pd.image_url " +
+        String sql = "SELECT p.id AS pet_id, p.name, p.weight, p.species, p.paper_trained, p.parent_id, p.pet_details_id, " +
+                "pd.id AS details_id, pd.age, pd.breed, pd.description, pd.image_url " +
                 "FROM pet p " +
-                "LEFT JOIN pet_details pd ON p.pet_details_id = pd.id " +
+                "JOIN pet_details pd ON p.pet_details_id = pd.id " +
                 "WHERE p.id = ?";
-        try {
-            SqlRowSet results = template.queryForRowSet(sql, petId);
 
-            if (results.next()) {
-                pet = new Pet();
-                pet.setName(results.getString("name"));
-                pet.setAge(results.getInt("age"));
-                pet.setBreed(results.getString("breed"));
-                pet.setDescription(results.getString("description"));
-                pet.setImageUrl(results.getString("image_url"));
-            } else {
-                return null;
-            }
+        return template.queryForObject(sql, new Object[]{petId}, (rs, rowNum) -> {
+            Pet pet = new Pet();
+            pet.setId(rs.getInt("pet_id"));
+            pet.setName(rs.getString("name"));
+            pet.setWeight(rs.getInt("weight"));
+            pet.setSpecies(rs.getString("species"));
+            pet.setPaperTrained(rs.getBoolean("paper_trained"));
+            pet.setParent(rs.getInt("parent_id"));
+            pet.setPetDetailsId(rs.getInt("pet_details_id"));  // Set the foreign key to the pet_details table
+            pet.setAge(rs.getInt("age"));
+            pet.setBreed(rs.getString("breed"));
+            pet.setDescription(rs.getString("description"));
+            pet.setImageUrl(rs.getString("image_url"));
+            return pet;
+        });
+    }
+    public void updatePet(int petId, Pet pet) {
+        // Update the pet table
+        String updatePetSql = "UPDATE pet SET name = ?, weight = ?, species = ?, paper_trained = ? WHERE id = ?";
 
-        } catch (CannotGetJdbcConnectionException e) {
-            System.out.println("Problem connecting");
-        } catch (DataIntegrityViolationException e) {
-            System.out.println("Data problems");
-        }
-        return pet;
+        // Update the pet_details table
+        String updatePetDetailsSql = "UPDATE pet_details SET age = ?, breed = ?, description = ?, image_url = ? WHERE id = ?";
+
+        // Update the pet table using the provided petId
+        template.update(updatePetSql, pet.getName(), pet.getWeight(), pet.getSpecies(), pet.isPaperTrained(), petId);
+
+        // Update the pet_details table using the petDetailsId, which corresponds to pet_details.id
+        template.update(updatePetDetailsSql, pet.getAge(), pet.getBreed(), pet.getDescription(), pet.getImageUrl(), pet.getPetDetailsId());
     }
 
     @Override
