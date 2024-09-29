@@ -36,6 +36,7 @@ public class PetJdbcDAO implements PetDAO {
 
         return pet;
     }
+
     private Pet mapRowToNewPet(SqlRowSet rowSet) {
         Pet pet = new Pet();
 
@@ -62,7 +63,8 @@ public class PetJdbcDAO implements PetDAO {
             SqlRowSet results = template.queryForRowSet(sql);
 
             while (results.next()) {
-                pets.add(mapRowToPetWithParentName(results));;
+                pets.add(mapRowToPetWithParentName(results));
+                ;
             }
         } catch (CannotGetJdbcConnectionException e) {
             System.out.println("Problem connecting" + e.getMessage());
@@ -77,18 +79,23 @@ public class PetJdbcDAO implements PetDAO {
 
     @Override
     public Pet getPet(int petId) {
-
         Pet pet = null;
 
-        String sql = "SELECT * FROM pet WHERE id = ?";
+        String sql = "SELECT p.name, pd.age, pd.breed, pd.description, pd.image_url " +
+                "FROM pet p " +
+                "LEFT JOIN pet_details pd ON p.pet_details_id = pd.id " +
+                "WHERE p.id = ?";
         try {
             SqlRowSet results = template.queryForRowSet(sql, petId);
 
             if (results.next()) {
-
-                pet = mapRowToNewPet(results);
-
-            }else{
+                pet = new Pet();
+                pet.setName(results.getString("name"));
+                pet.setAge(results.getInt("age"));
+                pet.setBreed(results.getString("breed"));
+                pet.setDescription(results.getString("description"));
+                pet.setImageUrl(results.getString("image_url"));
+            } else {
                 return null;
             }
 

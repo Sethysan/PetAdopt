@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        
+
         <div class="section pets-section">
             <h1>Pets!</h1>
             <div class="pets-list">
@@ -8,7 +8,7 @@
             </div>
         </div>
 
-        
+
         <div class="section parents-section">
             <button @click="toggleParents">{{ showParents ? 'Hide Parents' : 'Show Parents' }}</button>
             <div v-if="showParents">
@@ -28,7 +28,7 @@ import pets from "./Pets.vue";
 export default {
     data() {
         return {
-            showParents: false 
+            showParents: false
         };
     },
     methods: {
@@ -45,19 +45,28 @@ export default {
 
 <style scoped>
 .section {
-  width: 100%; 
-  padding: 20px;
+    width: 100%;
+    padding: 20px;
 }
 
-.pets-list, .parents-list {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-  gap: 20px;
-}
-.petCard, .parentCard {
-  flex: 1 1 200px; 
-  max-width: 250px;
+.pets-list,
+.parents-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 20px;
 }
 
+.petCard,
+.parentCard {
+    flex: 1 1 200px;
+    max-width: 250px;
+}
+
+h1 {
+    display: flex;
+    justify-content: center;
+    margin-right: 45%;
+    background-color: rgba(245, 245, 220, 0.409);
+}
 </style>
