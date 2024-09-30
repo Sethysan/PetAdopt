@@ -2,7 +2,10 @@
     <div class="container">
 
         <div class="section pets-section">
-            <h1>Pets!</h1>
+            <router-link :to="{ name: 'addParent' }" class="parent-link"></router-link>
+            <div>
+                <h1>Pets!</h1>
+            </div>
             <div class="pets-list">
                 <pets />
             </div>
@@ -10,12 +13,17 @@
 
 
         <div class="section parents-section">
-            <button @click="toggleParents">{{ showParents ? 'Hide Parents' : 'Show Parents' }}</button>
+            <button @click="toggleParents" class="parents-view">{{ showParents ? 'Hide Parents' : 'Show Parents' }}</button>
             <div v-if="showParents">
+                <div class="parents-list"></div>
                 <h1>Parents!</h1>
-                <div class="parents-list">
-                    <parents />
+                <div>
+                    <router-link :to="{ name: 'addParent' }" class="parent-link">
+                        <button class="add-parent">Add New Parent</button>
+                    </router-link>
                 </div>
+                <parents />
+
             </div>
         </div>
     </div>
@@ -62,11 +70,53 @@ export default {
     flex: 1 1 200px;
     max-width: 250px;
 }
+.parents-view{
+    width: auto;
+    font-weight: bold;
+    border-radius: 7px;
+    border: 1px solid #000;
+    padding: 10px 20px;
+    background-color: rgba(248, 222, 182, 0.8);
+    color: black;
+    text-decoration: none;
+    margin-left: 10px;
+    margin-bottom: 15px;
+    transition: background-color 0.3s;
+}
+.parents-view:hover {
+   background-color:  rgba(100, 100, 177, 0.8);
+}
+
+.parent-link {
+    display: inline-block;
+    text-decoration: none;
+    color: inherit;
+    position: relative;
+}
+
+.add-parent {
+    width: auto;
+    font-weight: bold;
+    border-radius: 7px;
+    border: 1px solid #000;
+    padding: 10px 20px;
+    background-color: rgba(248, 222, 182, 0.8);
+    color: black;
+    text-decoration: none;
+    margin-left: 10px;
+    margin-bottom: 15px;
+    transition: background-color 0.3s;
+}
+
+.add-parent:hover {
+    background-color: rgba(53, 197, 233, 0.8);
+}
 
 h1 {
-    display: flex;
+    
+    display: inline-block;
     justify-content: center;
-    margin-right: 45%;
-    background-color: rgba(245, 245, 220, 0.409);
+    margin-left: 10px;
+    
 }
 </style>

@@ -49,14 +49,14 @@ public class PetController {
         return petDAO.savePet(pet);
     }
 
-    //TODO: Endpoint to add a parent
+
     @ResponseStatus(HttpStatus.CREATED)
     @RequestMapping(path = "/add-parent", method = RequestMethod.POST)
     public Parent addParent(@RequestBody Parent parent) {
         return petDAO.addParent(parent);
     }
 
-    //TODO: Endpoint to retrieve all parents
+
     @RequestMapping(path = "/parents", method = RequestMethod.GET)
     public List<Parent> getParents() {
         return petDAO.getParents();
@@ -68,7 +68,7 @@ public class PetController {
         return petDAO.getParent(id);
     }
 
-    //TODO: Endpoint to link a parent and a pet
+
     @RequestMapping(path = "/adopt", method = RequestMethod.PUT)
     public void adopt(@RequestBody AdoptionDTO adoptionDTO) {
         petDAO.link(adoptionDTO.getParentId(), adoptionDTO.getPetId());

@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 import javax.sql.DataSource;
 import java.util.ArrayList;
 import java.util.List;
-
+// TODO: implement try catch blocks to handle exceptions
 @Component
 public class PetJdbcDAO implements PetDAO {
 
@@ -80,9 +80,11 @@ public class PetJdbcDAO implements PetDAO {
     @Override
     public Pet getPet(int petId) {
         String sql = "SELECT p.id AS pet_id, p.name, p.weight, p.species, p.paper_trained, p.parent_id, p.pet_details_id, " +
-                "pd.id AS details_id, pd.age, pd.breed, pd.description, pd.image_url " +
+                "pd.id AS details_id, pd.age, pd.breed, pd.description, pd.image_url, " + //
+                "CASE WHEN p.parent_id = 1 THEN 'Needs Adopted' ELSE pr.name END AS parent_name " +
                 "FROM pet p " +
                 "JOIN pet_details pd ON p.pet_details_id = pd.id " +
+                "LEFT JOIN parent pr ON p.parent_id = pr.id " + 
                 "WHERE p.id = ?";
 
         return template.queryForObject(sql, new Object[]{petId}, (rs, rowNum) -> {
@@ -93,7 +95,8 @@ public class PetJdbcDAO implements PetDAO {
             pet.setSpecies(rs.getString("species"));
             pet.setPaperTrained(rs.getBoolean("paper_trained"));
             pet.setParent(rs.getInt("parent_id"));
-            pet.setPetDetailsId(rs.getInt("pet_details_id"));  // Set the foreign key to the pet_details table
+            pet.setParentName(rs.getString("parent_name"));
+            pet.setPetDetailsId(rs.getInt("pet_details_id"));
             pet.setAge(rs.getInt("age"));
             pet.setBreed(rs.getString("breed"));
             pet.setDescription(rs.getString("description"));

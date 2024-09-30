@@ -2,12 +2,10 @@
   <div class="details-container">
     <div class="pet-card">
       <h1>Pet Details</h1>
-
       <div v-if="pet && pet.imageUrl">
         <img :src="pet.imageUrl" alt="Pet Image" class="pet-image" />
-        
+
         <div class="pet-info">
-          <!-- Editable or static fields depending on the edit mode -->
           <div>
             <label>Name:</label>
             <span v-if="!isEditing">{{ pet.name }}</span>
@@ -65,12 +63,15 @@
         <p>Loading pet details...</p>
       </div>
 
-      <!-- Edit and Save buttons -->
       <div class="buttons">
-        <router-link to="/" class="btn">Return Home</router-link>
         <button @click="toggleEditMode" class="btn">
           {{ isEditing ? 'Cancel' : 'Edit Details' }}
-        </button>
+        </button><br>
+        <div v-if="isAdoptable">
+          <router-link :to="{ path: '/adopt', query: { petId: pet.id } }" class="btn">Adopt Me!</router-link><br>
+        </div>
+        <router-link to="/" class="btn">Return Home</router-link>
+        <br>
         <button v-if="isEditing" @click="saveChanges" class="btn btn-save">Save</button>
       </div>
     </div>
@@ -86,6 +87,7 @@ export default {
       pet: null,         // Fetched pet data
       editablePet: {},   // Editable copy of the pet data
       isEditing: false,  // Flag for edit mode
+      isAdoptable: false,
     };
   },
   created() {
@@ -98,7 +100,15 @@ export default {
       ShelterService.getPet(petId)
         .then(response => {
           this.pet = response.data;  // Set the pet data
-          this.pet.imageUrl = `http://localhost:8080${this.pet.imageUrl}`;
+          console.log(this.pet);
+          if (this.pet.parent === 1) {
+            this.isAdoptable = true;  // Set adoptable to true
+          } else {
+            this.isAdoptable = false; // Otherwise, set to false
+          }
+          if (!this.pet.imageUrl.startsWith('http://localhost:8080')) {
+            this.pet.imageUrl = `http://localhost:8080${this.pet.imageUrl}`;
+          }
           this.editablePet = { ...this.pet };  // Create a copy of the pet data for editing
         })
         .catch(error => {
@@ -117,11 +127,19 @@ export default {
 
     // Save the edited data
     saveChanges() {
-      ShelterService.updatePet(this.pet.id, this.editablePet)
+      const updatedPet = {
+        ...this.editablePet,
+        imageUrl: this.editablePet.imageUrl.replace('http://localhost:8080', '') // Remove base URL
+      };
+      ShelterService.updatePet(this.pet.id, updatedPet)
         .then(response => {
           this.pet = response.data;  // Update the pet data with the new changes
+          if (!this.pet.imageUrl.startsWith('http://localhost:8080')) {
+            this.pet.imageUrl = `http://localhost:8080${this.pet.imageUrl}`;
+          }
           this.isEditing = false;  // Exit edit mode
           alert('Pet details updated successfully');
+
         })
         .catch(error => {
           console.error('Error saving pet details:', error);
@@ -137,43 +155,75 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
+  padding: 20px;
 }
 
 .pet-card {
   background-color: white;
   border-radius: 20px;
   padding: 20px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  max-width: 400px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  max-width: 30%;
+  width: 100%;
   text-align: center;
   font-family: 'Arial', sans-serif;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
 }
 
 .pet-image {
   width: 100%;
   height: auto;
+  object-fit: cover;
   border-radius: 10px;
   margin-bottom: 15px;
 }
 
+.pet-info {
+  overflow-y: auto;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+}
+
 .buttons {
-  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  margin-top: 10px;
+}
+
+button {
+  all: unset;
+  text-decoration-style: solid;
+  text-decoration-thickness: auto;
 }
 
 .btn {
-  display: inline-block;
+  display: block;
+  box-sizing: border-box;
+  height: 30px;
+  margin-left: 5px;
+  margin-right: 5px;
   padding: 10px 20px;
   background-color: #007bff;
   color: white;
   text-decoration: none;
   border-radius: 5px;
-  margin-right: 10px;
   transition: background-color 0.3s;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  padding-block: 1px;
+  padding-inline: 6px;
+  border-style: outset;
+  border-color: rgb(108, 105, 105);
+  border-image: initial;
+
 }
 
 .btn:hover {
   background-color: #0056b3;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+  /* Enhance shadow on hover */
 }
 
 .btn-save {
@@ -182,6 +232,23 @@ export default {
 
 .btn-save:hover {
   background-color: #218838;
+}
+
+.router-link {
+  background-color: #007bff;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  text-decoration: none;
+  display: inline-block;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  /* Ensure shadow is applied */
+}
+
+.router-link:hover {
+  background-color: #0056b3;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+  /* Enhance shadow on hover */
 }
 
 .pet-info label {
