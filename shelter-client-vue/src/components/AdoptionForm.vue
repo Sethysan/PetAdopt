@@ -92,7 +92,7 @@ export default {
                     }
                 ).catch(
                     (error) => {
-                        alert("Adoption Failed");
+                        alert("Adoption Failed", error);
                     }
                 )
             } else {
