@@ -2,18 +2,21 @@
     <div class="container">
 
         <div class="section pets-section">
-            <router-link :to="{ name: 'addParent' }" class="parent-link"></router-link>
             <div>
                 <h1>Pets!</h1>
             </div>
             <div class="pets-list">
                 <pets />
             </div>
+            <router-link :to="{ name: 'addPet' }">
+                <button class="add-pet">Add New Pet</button>
+            </router-link>
         </div>
 
 
         <div class="section parents-section">
-            <button @click="toggleParents" class="parents-view">{{ showParents ? 'Hide Parents' : 'Show Parents' }}</button>
+            <button @click="toggleParents" class="parents-view">{{ showParents ? 'Hide Parents' : 'Show Parents'
+                }}</button>
             <div v-if="showParents">
                 <div class="parents-list"></div>
                 <h1>Parents!</h1>
@@ -70,7 +73,8 @@ export default {
     flex: 1 1 200px;
     max-width: 250px;
 }
-.parents-view{
+
+.parents-view {
     width: auto;
     font-weight: bold;
     border-radius: 7px;
@@ -81,10 +85,12 @@ export default {
     text-decoration: none;
     margin-left: 10px;
     margin-bottom: 15px;
-    transition: background-color 0.3s;
+    transition: background-color 0.4s ease-in-out;
 }
+.add-pet:hover ,
 .parents-view:hover {
-   background-color:  rgba(100, 100, 177, 0.8);
+    background-color:  rgba(247, 200, 131, 0.8);
+    transform: scale(1.02);
 }
 
 .parent-link {
@@ -93,7 +99,7 @@ export default {
     color: inherit;
     position: relative;
 }
-
+.add-pet ,
 .add-parent {
     width: auto;
     font-weight: bold;
@@ -105,18 +111,20 @@ export default {
     text-decoration: none;
     margin-left: 10px;
     margin-bottom: 15px;
-    transition: background-color 0.3s;
+    transition: background-color 0.4s ease-in-out;
+    
 }
 
 .add-parent:hover {
     background-color: rgba(53, 197, 233, 0.8);
+    transform: scale(1.02);
 }
 
 h1 {
-    
+
     display: inline-block;
     justify-content: center;
     margin-left: 10px;
-    
+
 }
 </style>
